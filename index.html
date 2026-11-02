@@ -172,15 +172,43 @@ h1 {
   color: #374151;
   margin-top: var(--wrks-viz-space-1);
 }
-.answer-row span.m {
-  display: inline-block;
-  padding: 2px 8px;
-  margin: 0 2px;
+.answer-row {
+  font-size: 15px;
+  color: #374151;
+  margin-top: var(--wrks-viz-space-2);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--wrks-viz-space-1);
+}
+.answer-row .m-box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 10px;
   border: 1px solid var(--wrks-viz-border);
   border-radius: 4px;
   background: #f9fafb;
-  font-weight: 600;
+  min-width: 50px;
 }
+.answer-row .m-text {
+  font-weight: 600;
+  font-size: 16px;
+}
+.answer-row .m-type {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+.answer-row .m-plus {
+  align-self: center;
+  color: #9ca3af;
+  font-weight: 600;
+  padding: 0 2px;
+}
+
 .controls {
   display: flex;
   gap: var(--wrks-viz-space-2);
@@ -295,148 +323,131 @@ button:disabled {
 
 <script>
 const problems = [
-  // ===== 쉬움 (3개) =====
+  // ===== 쉬움 =====
   {
-    word: "밝다",
-    cuts: [1],
+    word: "밝다", cuts: [1],
     morphemes: ["밝","다"],
     display: ["밝-","-다"],
-    level: "쉬움",
-    hint: "밝(어근) + 다(어미)"
+    types: ["용언의 어간","용언의 어미"],
+    level: "쉬움", hint: "밝(어근) + 다(어미)"
   },
   {
-    word: "차다",
-    cuts: [1],
+    word: "차다", cuts: [1],
     morphemes: ["차","다"],
     display: ["차-","-다"],
-    level: "쉬움",
-    hint: "차(어근) + 다(어미)"
+    types: ["용언의 어간","용언의 어미"],
+    level: "쉬움", hint: "차(어근) + 다(어미)"
   },
   {
-    word: "활짝",
-    cuts: [],
+    word: "활짝", cuts: [],
     morphemes: ["활짝"],
     display: ["활짝"],
-    level: "쉬움",
-    hint: "함정! 활짝은 단일어(부사) - 쪼개지 않습니다"
+    types: ["어근"],
+    level: "쉬움", hint: "함정! 활짝은 단일어(부사) - 쪼개지 않습니다"
   },
 
-  // ===== 보통: 합성어 (7개) =====
+  // ===== 보통: 합성어 =====
   {
-    word: "봄바람",
-    cuts: [1],
+    word: "봄바람", cuts: [1],
     morphemes: ["봄","바람"],
     display: ["봄","바람"],
-    level: "보통",
-    hint: "봄(명사) + 바람(명사) = 합성어"
+    types: ["어근","어근"],
+    level: "보통", hint: "봄(명사) + 바람(명사) = 합성어"
   },
   {
-    word: "밤하늘",
-    cuts: [1],
+    word: "밤하늘", cuts: [1],
     morphemes: ["밤","하늘"],
     display: ["밤","하늘"],
-    level: "보통",
-    hint: "밤(명사) + 하늘(명사) = 합성어"
+    types: ["어근","어근"],
+    level: "보통", hint: "밤(명사) + 하늘(명사) = 합성어"
   },
   {
-    word: "가을바람",
-    cuts: [2],
+    word: "가을바람", cuts: [2],
     morphemes: ["가을","바람"],
     display: ["가을","바람"],
-    level: "보통",
-    hint: "가을(명사) + 바람(명사) = 합성어"
+    types: ["어근","어근"],
+    level: "보통", hint: "가을(명사) + 바람(명사) = 합성어"
   },
   {
-    word: "눈꽃",
-    cuts: [1],
+    word: "눈꽃", cuts: [1],
     morphemes: ["눈","꽃"],
     display: ["눈","꽃"],
-    level: "보통",
-    hint: "눈(명사) + 꽃(명사) = 합성어"
+    types: ["어근","어근"],
+    level: "보통", hint: "눈(명사) + 꽃(명사) = 합성어"
   },
   {
-    word: "종이배",
-    cuts: [2],
+    word: "종이배", cuts: [2],
     morphemes: ["종이","배"],
     display: ["종이","배"],
-    level: "보통",
-    hint: "종이(명사) + 배(명사) = 합성어"
+    types: ["어근","어근"],
+    level: "보통", hint: "종이(명사) + 배(명사) = 합성어"
   },
   {
-    word: "손수건",
-    cuts: [1],
+    word: "손수건", cuts: [1],
     morphemes: ["손","수건"],
     display: ["손","수건"],
-    level: "보통",
-    hint: "손(명사) + 수건(명사) = 합성어"
+    types: ["어근","어근"],
+    level: "보통", hint: "손(명사) + 수건(명사) = 합성어"
   },
   {
-    word: "낮잠",
-    cuts: [1],
+    word: "낮잠", cuts: [1],
     morphemes: ["낮","잠"],
     display: ["낮","잠"],
-    level: "보통",
-    hint: "낮(명사) + 잠(명사) = 합성어"
+    types: ["어근","어근"],
+    level: "보통", hint: "낮(명사) + 잠(명사) = 합성어"
   },
 
-  // ===== 어려움: 파생어 (6개) =====
+  // ===== 어려움: 파생어 =====
   {
-    word: "맏아들",
-    cuts: [1],
+    word: "맏아들", cuts: [1],
     morphemes: ["맏","아들"],
     display: ["맏-","아들"],
-    level: "어려움",
-    hint: "맏-(접두사) + 아들 = 파생어"
+    types: ["접사","어근"],
+    level: "어려움", hint: "맏-(접두사) + 아들 = 파생어"
   },
   {
-    word: "맏딸",
-    cuts: [1],
+    word: "맏딸", cuts: [1],
     morphemes: ["맏","딸"],
     display: ["맏-","딸"],
-    level: "어려움",
-    hint: "맏-(접두사) + 딸 = 파생어"
+    types: ["접사","어근"],
+    level: "어려움", hint: "맏-(접두사) + 딸 = 파생어"
   },
   {
-    word: "풋사과",
-    cuts: [1],
+    word: "풋사과", cuts: [1],
     morphemes: ["풋","사과"],
     display: ["풋-","사과"],
-    level: "어려움",
-    hint: "풋-(접두사, 덜 익은) + 사과 = 파생어"
+    types: ["접사","어근"],
+    level: "어려움", hint: "풋-(접두사, 덜 익은) + 사과 = 파생어"
   },
   {
-    word: "맨손",
-    cuts: [1],
+    word: "맨손", cuts: [1],
     morphemes: ["맨","손"],
     display: ["맨-","손"],
-    level: "어려움",
-    hint: "맨-(접두사, 아무것도 없는) + 손 = 파생어"
+    types: ["접사","어근"],
+    level: "어려움", hint: "맨-(접두사, 아무것도 없는) + 손 = 파생어"
   },
   {
-    word: "지우개",
-    cuts: [2],
+    word: "지우개", cuts: [2],
     morphemes: ["지우","개"],
     display: ["지우-","-개"],
-    level: "어려움",
-    hint: "지우-(어근) + -개(접미사, 도구) = 파생어"
+    types: ["용언의 어근","접사"],
+    level: "어려움", hint: "지우-(어근) + -개(접미사, 도구) = 파생어"
   },
   {
-    word: "가위질",
-    cuts: [2],
+    word: "가위질", cuts: [2],
     morphemes: ["가위","질"],
     display: ["가위","-질"],
-    level: "어려움",
-    hint: "가위 + -질(접미사, ~하는 행동) = 파생어"
+    types: ["어근","접사"],
+    level: "어려움", hint: "가위 + -질(접미사, ~하는 행동) = 파생어"
   },
 
-  // ===== 보스: 선어말어미 (1개) =====
+  // ===== 보스 =====
   {
-    word: "피었다",
-    cuts: [1, 2],
+    word: "피었다", cuts: [1, 2],
     morphemes: ["피","었","다"],
     display: ["피-","-었-","-다"],
-    level: "보스",
-    hint: "피(어근) + 었(과거 선어말어미) + 다(어미)"
+    types: ["용언의 어간","용언의 어미","용언의 어미"],
+    level: "보스", hint: "피(어근) + 었(과거 선어말어미) + 다(어미)"
   }
 ];
 
@@ -518,6 +529,19 @@ function toggleCut(pos) {
   render();
 }
 
+function renderAnswer(p) {
+  let html = "<div class='answer-row'>";
+  for (let i = 0; i < p.display.length; i++) {
+    html += "<div class='m-box'>";
+    html += "<div class='m-text'>" + p.display[i] + "</div>";
+    html += "<div class='m-type'>" + p.types[i] + "</div>";
+    html += "</div>";
+    if (i < p.display.length - 1) html += "<span class='m-plus'>+</span>";
+  }
+  html += "</div>";
+  return html;
+}
+
 function check() {
   const p = problems[state.idx];
   const correct = new Set(p.cuts);
@@ -536,7 +560,7 @@ function check() {
     feedbackEl.className = "feedback ok";
     let msg = "정답! +" + gained + "점";
     if (bonus) msg += " (연속 " + state.combo + "번째 보너스!)";
-    msg += "<div class='answer-row'>" + p.display.map(m => "<span class='m'>" + m + "</span>").join(" + ") + "</div>";
+    msg += renderAnswer(p);
     feedbackEl.innerHTML = msg;
   } else {
     state.combo = 0;
@@ -545,7 +569,7 @@ function check() {
     if (misses) msg += "놓친 경계 " + misses + "곳";
     if (misses && wrongs) msg += ", ";
     if (wrongs) msg += "잘못 자른 곳 " + wrongs + "곳";
-    msg += "<div class='answer-row'>정답: " + p.display.map(m => "<span class='m'>" + m + "</span>").join(" + ") + "</div>";
+    msg += "<div style='margin-top:8px'>정답:</div>" + renderAnswer(p);
     feedbackEl.innerHTML = msg;
   }
   hintEl.textContent = "결과 확인";
